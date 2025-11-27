@@ -1,7 +1,10 @@
 package handlers
 
 import (
+	"html/template"
 	"net/http"
+	"strconv"
+
 	"main/data"
 )
 
@@ -26,14 +29,35 @@ var books = []data.Book{
 	},
 }
 
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	return
-}
-
 func BookHandler(w http.ResponseWriter, r *http.Request) {
-	return
-}
+	idStr := r.URL.Query().Get("id")
 
-func ContactHandler(w http.ResponseWriter, r *http.Request) {
-	return
+	if idStr == "" {
+		http.Error(w, "ID requis", http.StatusBadRequest)
+		return
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "ID invalide", http.StatusBadRequest)
+		return
+	}
+
+	var selected *data.Book
+	for _, b := range books {
+		if b.ID == id {
+			selected = &b
+		}
+	}
+
+	if selected == nil {
+		http.Error(w, "Livre introuvable", http.StatusNotFound)
+		return
+	}
+
+	tmpl := template.Must(template.ParseFiles(
+		"templates/layout.html",
+		"templates/book.html",
+	))
+	tmpl.ExecuteTemplate(w, "layout", selected)
 }
