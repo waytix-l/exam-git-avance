@@ -1,63 +1,70 @@
 package handlers
 
 import (
-	"html/template"
-	"net/http"
-	"strconv"
-
-	"main/data"
+    "html/template"
+    "net/http"
+    "strconv"
+    "main/data"
 )
 
 var books = []data.Book{
-	{
-		ID:     1,
-		Title:  "The Go Programming Language",
-		Author: "Alan Donovan",
-		Year:   2015,
-	},
-	{
-		ID:     2,
-		Title:  "Clean Code",
-		Author: "Robert C. Martin",
-		Year:   2008,
-	},
-	{
-		ID:     3,
-		Title:  "The Pragmatic Programmer",
-		Author: "Andrew Hunt",
-		Year:   1999,
-	},
+    {
+        ID:     1,
+        Title:  "The Go Programming Language",
+        Author: "Alan Donovan",
+        Year:   2015,
+    },
+    {
+        ID:     2,
+        Title:  "Clean Code",
+        Author: "Robert C. Martin",
+        Year:   2008,
+    },
+    {
+        ID:     3,
+        Title:  "The Pragmatic Programmer",
+        Author: "Andrew Hunt",
+        Year:   1999,
+    },
+}
+
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
+    tmpl := template.Must(template.ParseFiles("templates/home.html"))
+    tmpl.Execute(w, books)
 }
 
 func BookHandler(w http.ResponseWriter, r *http.Request) {
-	idStr := r.URL.Query().Get("id")
+    idStr := r.URL.Query().Get("id")
 
-	if idStr == "" {
-		http.Error(w, "ID requis", http.StatusBadRequest)
-		return
-	}
+    if idStr == "" {
+        http.Error(w, "ID requis", http.StatusBadRequest)
+        return
+    }
 
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		http.Error(w, "ID invalide", http.StatusBadRequest)
-		return
-	}
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        http.Error(w, "ID invalide", http.StatusBadRequest)
+        return
+    }
 
-	var selected *data.Book
-	for _, b := range books {
-		if b.ID == id {
-			selected = &b
-		}
-	}
+    var selected *data.Book
+    for _, b := range books {
+        if b.ID == id {
+            selected = &b
+            break
+        }
+    }
 
-	if selected == nil {
-		http.Error(w, "Livre introuvable", http.StatusNotFound)
-		return
-	}
+    if selected == nil {
+        http.Error(w, "Livre introuvable", http.StatusNotFound)
+        return
+    }
 
-	tmpl := template.Must(template.ParseFiles(
-		"templates/layout.html",
-		"templates/book.html",
-	))
-	tmpl.ExecuteTemplate(w, "layout", selected)
+    tmpl := template.Must(template.ParseFiles("templates/book.html"))
+    tmpl.Execute(w, selected)
+}
+
+func ContactHandler(w http.ResponseWriter, r *http.Request) {
+    tmpl := template.Must(template.ParseFiles("templates/contact.html"))
+    tmpl.Execute(w, nil)
 }
