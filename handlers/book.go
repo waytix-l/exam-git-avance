@@ -2,23 +2,38 @@ package handlers
 
 import (
 	"net/http"
-    "main/data"
+	"main/data"
 )
 
 var books = []data.Book{
-    {1, "The Go Programming Language", "Alan Donovan", 2015},
-    {2, "Clean Code", "Robert C. Martin", 2008},
-    {3, "The Pragmatic Programmer", "Andrew Hunt", 1999},
+	{
+		ID:     1,
+		Title:  "The Go Programming Language",
+		Author: "Alan Donovan",
+		Year:   2015,
+	},
+	{
+		ID:     2,
+		Title:  "Clean Code",
+		Author: "Robert C. Martin",
+		Year:   2008,
+	},
+	{
+		ID:     3,
+		Title:  "The Pragmatic Programmer",
+		Author: "Andrew Hunt",
+		Year:   1999,
+	},
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-    return
+	return
 }
 
 func BookHandler(w http.ResponseWriter, r *http.Request) {
-    return
+	return
 }
 
 func ContactHandler(w http.ResponseWriter, r *http.Request) {
-    return
+	return
 }
