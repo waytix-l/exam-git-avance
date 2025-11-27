@@ -9,3 +9,4 @@ Ce repository contient plusieurs branches avec du code pré-écrit.
 - résolution de conflits
 - tags
 - historique propre
+-
